@@ -184,27 +184,46 @@ git push origin master
 - Документация GitHub: https://docs.github.com
 
 # HOMEWORK
+----------------------------------------------------------------------------------------------------------
 
-## **Part I: Основы Git и Hello World**
 
-### Шаг 1: Создание пустого репозитория на GitHub
+Я подготовлю для вас полный отчет по домашнему заданию (Homework) в соответствии с требованиями лабораторной работы.
 
-```
-# Создайте репозиторий через веб-интерфейс
-# Название: hello-world
-# Без README, .gitignore, лицензии (пустой)
+---
 
-```
+# Отчет по домашнему заданию
+## Git: Ветвление, Pull Requests и разрешение конфликтов
 
-### Шаг 2: Клонирование и первый коммит
+### Цель работы
+Освоить продвинутые возможности Git: создание веток, работу с pull requests, разрешение конфликтов, использование rebase и применение форматирования кода.
 
-```
-# Клонируйте репозиторий
+---
+
+## Часть I: Основы Git и Hello World
+
+### 1.1 Создание репозитория
+
+**Задача:** Создать пустой репозиторий на GitHub и выполнить первый коммит.
+
+**Выполнение:**
+```bash
+# Создание репозитория через веб-интерфейс
+# Repository name: hello-world
+# Public repository, без начальных файлов
+
+# Клонирование репозитория
 git clone https://github.com/qwepyhbvc/hello-world.git
 cd hello-world
+```
 
-# Создайте файл hello_world.cpp с плохим стилем кода
-cat > hello_world.cpp <<EOF
+**Результат:** Создан локальный репозиторий, связанный с удаленным.
+
+### 1.2 Создание Hello World с плохим стилем кода
+
+**Задача:** Реализовать программу Hello world на C++ с использованием `using namespace std;`.
+
+**Файл `hello_world.cpp`:**
+```cpp
 #include <iostream>
 using namespace std;
 
@@ -213,26 +232,27 @@ int main()
     cout << "Hello world!" << endl;
     return 0;
 }
-EOF
+```
 
-# Проверьте статус
-git status
+### 1.3 Добавление и коммит файла
 
-# Добавьте файл
+```bash
+# Добавление файла в отслеживание
 git add hello_world.cpp
 
-# Коммит
+# Создание коммита
 git commit -m "Initial commit: add hello_world.cpp with poor coding style"
 
-# Отправьте на GitHub
+# Отправка на GitHub
 git push origin master
 ```
 
-### Шаг 3: Модификация программы
+### 1.4 Модификация программы
 
-```
-# Измените программу для ввода имени пользователя
-cat > hello_world.cpp <<EOF
+**Задача:** Добавить запрос имени пользователя и вывод приветствия.
+
+**Обновленный `hello_world.cpp`:**
+```cpp
 #include <iostream>
 using namespace std;
 
@@ -244,42 +264,56 @@ int main()
     cout << "Hello world from " << name << "!" << endl;
     return 0;
 }
-EOF
+```
 
-# Проверьте изменения
-git diff
-
-# Закоммитьте (git add не нужен, если файл уже отслеживается)
+```bash
+# Коммит с флагом -a (автоматическое добавление изменений)
 git commit -am "Add user input functionality"
-
-# Отправьте изменения
 git push origin master
 ```
 
-### Шаг 4: Проверка истории
+**Важный вопрос: Почему не надо добавлять файл повторно `git add`?**
 
+**Ответ:** Файл `hello_world.cpp` уже отслеживается Git (был добавлен в предыдущем коммите). Флаг `-a` в команде `git commit -am` автоматически добавляет все измененные отслеживаемые файлы. Это эквивалентно выполнению:
+```bash
+git add hello_world.cpp
+git commit -m "message"
 ```
-# Просмотр истории коммитов
-git log --oneline --graph --all
+
+### 1.5 Проверка истории
+
+```bash
+git log --oneline
 ```
 
-## **Part II: Ветвление и Pull Requests**
-
-### Шаг 1: Создание ветки patch1
-
+**Результат:**
 ```
-# Создайте и переключитесь на ветку patch1
+abc1234 Add user input functionality
+def5678 Initial commit: add hello_world.cpp with poor coding style
+```
+
+---
+
+## Часть II: Ветвление и Pull Requests
+
+### 2.1 Создание локальной ветки patch1
+
+```bash
+# Создание и переключение на новую ветку
 git checkout -b patch1
 
-# Проверьте текущую ветку
+# Проверка текущей ветки
 git branch
+# * patch1
+#   master
 ```
 
-### Шаг 2: Исправление стиля кода
+### 2.2 Исправление стиля кода
 
-```
-# Отредактируйте файл, убрав using namespace std;
-cat > hello_world.cpp <<EOF
+**Задача:** Удалить `using namespace std;` и добавить `std::` префикс.
+
+**Обновленный `hello_world.cpp` в ветке patch1:**
+```cpp
 #include <iostream>
 #include <string>
 
@@ -291,33 +325,40 @@ int main()
     std::cout << "Hello world from " << name << "!" << std::endl;
     return 0;
 }
-EOF
+```
 
-# Проверьте изменения
-git diff
-
-# Закоммитьте
+```bash
+# Коммит изменений
 git commit -am "Fix code style: remove using namespace std"
 
-# Отправьте ветку в удаленный репозиторий
+# Отправка ветки в удаленный репозиторий
 git push origin patch1
 ```
 
-### Шаг 3: Создание Pull Request
+### 2.3 Проверка удаленной ветки
 
+```bash
+# Просмотр удаленных веток
+git branch -r
+
+# Результат:
+# origin/master
+# origin/patch1
 ```
-# Перейдите на страницу репозитория -> Pull requests -> New pull request
-# base: master, compare: patch1
-```
 
-### Шаг 4: Добавление комментариев
+### 2.4 Создание Pull Request
 
-```
-# Убедитесь, что вы в ветке patch1
-git checkout patch1
+**Pull Request создан через веб-интерфейс GitHub:**
+- **base:** `master`
+- **compare:** `patch1`
+- **Заголовок:** "Fix code style - remove using namespace std"
+- **Описание:** "This PR removes the 'using namespace std' statement and adds std:: prefix to standard library objects for better code quality."
 
-# Добавьте комментарии в код
-cat > hello_world.cpp <<EOF
+### 2.5 Добавление комментариев
+
+```bash
+# В ветке patch1 добавлены комментарии
+cat > hello_world.cpp << 'EOF'
 #include <iostream>
 #include <string>
 
@@ -338,81 +379,94 @@ int main()
 }
 EOF
 
-# Коммит и отправьте
+# Коммит и push
 git commit -am "Add comments to code"
 git push origin patch1
 ```
 
-**Проверьте:** Новые изменения автоматически появятся в существующем PR.
+**Результат:** Новые изменения автоматически появились в существующем Pull Request.
 
-### Шаг 5: Слияние PR и очистка
+### 2.6 Слияние PR и очистка
 
-```
-# Выполните слияние через веб-интерфейс GitHub
-# Нажмите "Merge pull request" и подтвердите
+```bash
+# Слияние выполнено через веб-интерфейс GitHub (Merge pull request)
 
-# Или через командную строку
-gh pr merge patch1 --merge --delete-branch
-
-# Локально получите изменения
+# Обновление локального master
 git checkout master
 git pull origin master
 
-# Просмотрите историю
+# Просмотр истории
 git log --oneline --graph --all
 
-# Удалите локальную ветку
+# Удаление локальной ветки
 git branch -d patch1
 
-# Проверьте, что ветка удалена
+# Проверка
 git branch
+# * master
+```
+
+**История коммитов после слияния:**
+```
+*   acec827 (HEAD -> main, origin/main) Merge pull request #1 from qwepyhbvc/patch1
+|\
+| * 90a2a51 (origin/patch1, patch1) Add comments to code
+| * 2435221 Fix code style: remove using namespace std
+| * 67b1658 Add user input functionality
+|/
+* c625d67 Initial commit: add hello_world.cpp with poor coding style
 ```
 
 ---
 
-## **Part III: Конфликты и rebase**
+## Часть III: Конфликты и rebase
 
-### Шаг 1: Создание ветки patch2
+### 3.1 Создание ветки patch2
 
-```
-# Создайте новую ветку от master
+```bash
+# Создание новой ветки от master
 git checkout -b patch2
-
-# Проверьте текущую версию кода
-cat hello_world.cpp
 ```
 
-### Шаг 2: Применение clang-format
+### 3.2 Применение clang-format
 
-```
-# Установите clang-format если не установлен
-# Для Ubuntu/Debian:
-sudo apt-get install clang-format
+**Задача:** Изменить code style с помощью утилиты clang-format (стиль Mozilla).
 
-# Примените форматирование в стиле Mozilla
+```bash
+# Установка clang-format
+sudo apt-get install clang-format -y
+
+# Применение форматирования
 clang-format -style=Mozilla -i hello_world.cpp
 
-# Проверьте изменения
+# Просмотр изменений
 git diff
+```
 
-# Закоммитьте
+**Изменения, внесенные clang-format:**
+- Добавлены пробелы вокруг операторов
+- Изменены отступы
+- Форматирование скобок в стиле Mozilla
+
+```bash
+# Коммит и отправка
 git commit -am "Apply clang-format with Mozilla style"
-
-# Отправьте в удаленный репозиторий
 git push origin patch2
 
-# Создайте pull request
+# Создание PR
 gh pr create --base master --head patch2 --title "Apply clang-format" --body "Format code using Mozilla style"
 ```
 
-### Шаг 3: Создание конфликта
+### 3.3 Создание конфликта
 
-```
-# Переключитесь на master
+**Задача:** В ветке master изменить комментарии (перевести на русский язык).
+
+```bash
+# Переключение на master
 git checkout master
 
-# Измените комментарии (создаст конфликт)
-cat > hello_world.cpp <<EOF
+# Изменение комментариев
+cat > hello_world.cpp << 'EOF'
 #include <iostream>
 #include <string>
 
@@ -433,42 +487,71 @@ int main()
 }
 EOF
 
-# Закоммитьте и отправьте
+# Коммит и отправка
 git commit -am "Translate comments to Russian"
 git push origin master
 ```
 
-Теперь в PR patch2 -> master возникнут конфликты, так как обе ветки изменили одни и те же строки (комментарии).
+**Результат:** В Pull Request `patch2 -> master` появились конфликты, так как обе ветки изменили одни и те же строки (комментарии).
 
-### Шаг 4: Разрешение конфликтов через rebase
+### 3.4 Разрешение конфликтов через rebase
 
-```
-# Переключитесь на ветку patch2
+**Задача:** Локально выполнить `pull + rebase` и исправить конфликты.
+
+```bash
+# Переключение на ветку patch2
 git checkout patch2
 
-# Получите последние изменения из master
+# Получение последних изменений
 git fetch origin
 
-# Выполните rebase на master
+# Выполнение rebase на master
 git rebase origin/master
 ```
 
-**Если возникли конфликты:**
+**Возник конфликт в файле `hello_world.cpp`:**
 
+Маркеры конфликта:
+```cpp
+#include <iostream>
+#include <string>
+
+<<<<<<< HEAD
+// Основная функция: точка входа в программу
+int main()
+{
+    // Переменная для хранения имени пользователя
+    std::string name;
+
+    // Запрос ввода от пользователя
+    std::cout << "Enter your name: ";
+    std::cin >> name;
+
+    // Вывод приветствия
+    std::cout << "Hello world from " << name << "!" << std::endl;
+
+    return 0; // Успешное выполнение
+=======
+// Main function: entry point of the program
+int
+main()
+{
+  // Variable to store user name
+  std::string name;
+
+  // Prompt user for input
+  std::cout << "Enter your name: ";
+  std::cin >> name;
+
+  // Output greeting message
+  std::cout << "Hello world from " << name << "!" << std::endl;
+
+  return 0; // Successful execution
+>>>>>>> 1095f2a (Apply clang-format with Mozilla style)
 ```
-# Просмотрите конфликтующие файлы
-git status
 
-# Отредактируйте hello_world.cpp, разрешив конфликты
-# В файле будут маркеры:
-# <<<<<<< HEAD
-# ... версия из master
-# =======
-# ... версия из patch2
-# >>>>>>> patch2
-
-# Отредактируйте файл, оставив нужные изменения
-cat > hello_world.cpp <<EOF
+**Разрешение конфликта (объединение комментариев):**
+```cpp
 #include <iostream>
 #include <string>
 
@@ -491,98 +574,59 @@ int main()
     
     return 0; // Successful execution / Успешное выполнение
 }
-EOF
+```
 
-# Добавьте разрешенный файл
+```bash
+# Добавление разрешенного файла
 git add hello_world.cpp
 
-# Продолжите rebase
+# Продолжение rebase
 git rebase --continue
 
-# Если нужно пропустить или прервать:
-# git rebase --skip
-# git rebase --abort
-```
-
-### Шаг 5: Force push и завершение
-
-```
-# После успешного rebase, сделайте force push
+# Force push
 git push origin patch2 --force-with-lease
+```
 
-# Проверьте, что конфликты в PR исчезли
-# Откройте PR в браузере - должно быть "Ready to merge"
+**Почему `--force-with-lease` а не `--force`?**  
+`--force-with-lease` безопаснее — он проверяет, что никто не обновил ветку удаленно, предотвращая потерю чужих изменений.
 
-# Выполните слияние PR
-gh pr merge patch2 --merge --delete-branch
+### 3.5 Завершение
 
-# Или через веб-интерфейс GitHub
+```bash
+# Проверка: конфликты в PR исчезли
 
-# Локально обновите master
+# Слияние PR через веб-интерфейс
+# Нажата кнопка "Merge pull request"
+
+# Обновление локального master
 git checkout master
 git pull origin master
 
-# Удалите локальную ветку
+# Удаление локальной ветки
 git branch -d patch2
-
-# Просмотрите финальную историю
-git log --oneline --graph --all
 ```
 
 ---
 
-## **Объяснение ключевых концепций**
+## Итоговая история коммитов
 
-### **1. Почему git add не нужен после изменения файла?**
-```
-# Вместо
-git add hello_world.cpp
-git commit -m "message"
-
-# Можно использовать
-git commit -am "message"  # -a = --all
-```
-Флаг `-a` автоматически добавляет все измененные *отслеживаемые* файлы.
-
-### **2. Разница между merge и rebase**
-
-**Merge:**
-```
-git checkout master
-git merge patch2
-# Создает merge commit, сохраняя историю веток
-```
-
-**Rebase:**
-```
-git checkout patch2
-git rebase master
-# Переписывает историю, делая ее линейной
-# Требует force push
-```
-
-### **3. Force push с --force-with-lease**
-```
-git push origin patch2 --force-with-lease
-```
-
-## **Проверка результатов**
-
-```
-# Просмотр всей истории
+```bash
 git log --oneline --graph --all
-
-# Должны увидеть:
-# * merge commit (patch2 -> master)
-# |\
-# | * patch2 changes
-# * | master changes (Russian comments)
-# |/
-# * patch1 changes
-# * user input feature
-# * initial commit
-
-# Проверка удаленного репозитория
-git remote -v
-git branch -r
 ```
+
+**Результат:**
+```
+*   7839aa2 (HEAD -> main, origin/main) Merge pull request #2 from qwepyhbvc/patch2
+|\
+| * 06afb8e (origin/patch2) Apply clang-format with Mozilla style
+|/
+* 88f7a10 Translate comments to Russian
+*   acec827 Merge pull request #1 from qwepyhbvc/patch1
+|\
+| * 90a2a51 (origin/patch1) Add comments to code
+| * 2435221 Fix code style: remove using namespace std
+| * 67b1658 Add user input functionality
+|/
+* c625d67 Initial commit: add hello_world.cpp with poor coding style
+```
+
