@@ -5,6 +5,10 @@ cmake-build-*/
 install/
 _install/
 
+# Homework build
+homework/build/
+homework/_build/
+
 # IDE files
 .vscode/
 .idea/
@@ -32,6 +36,6 @@ cmake_install.cmake
 Makefile
 *.cmake
 !CMakeLists.txt
-# Build directories (дополнительно)
-_build/
-_install/
+
+# Zone.Identifier
+*:Zone.Identifier
