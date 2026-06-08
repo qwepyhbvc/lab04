@@ -32,3 +32,6 @@ cmake_install.cmake
 Makefile
 *.cmake
 !CMakeLists.txt
+# Build directories (дополнительно)
+_build/
+_install/
